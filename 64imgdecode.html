@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decode Base64 Gambar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        textarea {
+            width: 90%;
+            height: 150px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Decode Base64 Gambar</h1>
+    <p>Masukkan kode Base64 gambar di bawah ini dan klik tombol untuk menampilkan gambar.</p>
+    <textarea id="base64Input" placeholder="Tempelkan kode Base64 Anda di sini..."></textarea>
+    <br>
+    <button onclick="decodeBase64()">Tampilkan Gambar</button>
+    <div id="output"></div>
+
+    <script>
+        function decodeBase64() {
+            const base64Input = document.getElementById("base64Input").value.trim();
+            const outputDiv = document.getElementById("output");
+
+            if (!base64Input) {
+                alert("Masukkan kode Base64 terlebih dahulu.");
+                return;
+            }
+
+            // Bersihkan output sebelumnya
+            outputDiv.innerHTML = "";
+
+            // Buat elemen gambar
+            const img = document.createElement("img");
+            img.src = `data:image/png;base64,${base64Input}`;
+            img.alt = "Hasil Gambar";
+
+            // Tampilkan gambar di halaman
+            outputDiv.appendChild(img);
+        }
+    </script>
+</body>
+</html>
