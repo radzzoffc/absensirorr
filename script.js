@@ -1,61 +1,70 @@
-// Load environment variables
-fetch('.env')
-    .then(response => response.text())
-    .then(text => {
-        const env = text.split('\n').reduce((acc, line) => {
-            const [key, value] = line.split('=');
-            acc[key.trim()] = value.trim();
-            return acc;
-        }, {});
-        init(env);
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("attendanceForm");
+    const captureBtn = document.getElementById("captureBtn");
+    const photoInput = document.getElementById("photoData");
+    const statusMessage = document.getElementById("statusMessage");
 
-function init(env) {
-    const SHEET_ID = env.SHEET_ID;
-    const API_KEY = env.API_KEY;
+    // SheetDB API URL (Ganti dengan URL Anda)
+    const SHEETDB_URL = "https://sheetdb.io/api/v1/gbwqck4ls6xpn";
 
-    document.getElementById('attendanceForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
+    // Initialize webcam
+    const camera = document.getElementById("camera");
+    let videoStream;
 
-        const name = document.getElementById('name').value;
-        const date = document.getElementById('date').value;
-        const gender = document.getElementById('gender').value;
-        const photo = document.getElementById('photo').files[0];
-
-        if (!photo) {
-            alert("Silakan unggah foto!");
-            return;
+    async function startCamera() {
+        try {
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const video = document.createElement("video");
+            video.srcObject = videoStream;
+            video.play();
+            camera.appendChild(video);
+            captureBtn.addEventListener("click", function () {
+                const canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const context = canvas.getContext("2d");
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                photoInput.value = canvas.toDataURL("image/png");
+                videoStream.getTracks().forEach((track) => track.stop());
+                camera.innerHTML = "<p>Foto berhasil diambil.</p>";
+            });
+        } catch (error) {
+            alert("Kamera tidak dapat diakses. Periksa izin browser.");
         }
+    }
 
-        const reader = new FileReader();
-        reader.onload = async function () {
-            const photoData = reader.result;
+    startCamera();
 
-            const data = {
-                values: [[name, date, gender, photoData]]
-            };
-
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/A1:append?valueInputOption=RAW&key=${API_KEY}`;
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-
-                if (response.ok) {
-                    document.getElementById('status').textContent = "Absensi berhasil dikirim";
-                } else {
-                    const error = await response.json();
-                    console.error(error);
-                    document.getElementById('status').textContent = "Gagal mengirim absensi";
-                }
-            } catch (err) {
-                console.error(err);
-                document.getElementById('status').textContent = "Terjadi kesalahan";
-            }
+    // Submit form
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const payload = {
+            data: {
+                name: formData.get("name"),
+                date: formData.get("date"),
+                gender: formData.get("gender"),
+                photo: formData.get("photoData"),
+            },
         };
 
-        reader.readAsDataURL(photo);
+        try {
+            const response = await fetch(SHEETDB_URL, {
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: { "Content-Type": "application/json" },
+            });
+            const result = await response.json();
+            if (result.created > 0) {
+                statusMessage.textContent = "Data berhasil dikirim!";
+                statusMessage.style.color = "green";
+                form.reset();
+            } else {
+                throw new Error("Gagal menyimpan data.");
+            }
+        } catch (error) {
+            statusMessage.textContent = `Gagal mengirim data: ${error.message}`;
+            statusMessage.style.color = "red";
+        }
     });
-}
+});
