@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 const context = canvas.getContext("2d");
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                photoInput.value = canvas.toDataURL("image/jpeg", 0.5); // Kompresi gambar
+                photoInput.value = canvas.toDataURL("image/jpeg", 0.5); 
                 videoStream.getTracks().forEach((track) => track.stop());
                 camera.innerHTML = "<p>Foto berhasil diambil</p>";
                 photoError.textContent = "";
             });
         } catch (error) {
-            alert("Kamera tidak dapat diakses. Periksa izin browser.");
+            alert("Kamera tidak dapat diakses. Silahkan periksa izin browser");
         }
     }
 
@@ -57,13 +57,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Validasi foto
         if (!photoInput.value) {
-            photoError.textContent = "Foto wajib diambil.";
+            photoError.textContent = "Upss Foto duluu";
             return;
         }
 
         // Validasi captcha
         if (captchaInput.value.toUpperCase() !== generatedCaptcha) {
-            captchaError.textContent = "Captcha tidak sesuai.";
+            captchaError.textContent = "Captcha tidak sesuai";
             generateCaptcha(); // Generate ulang captcha
             captchaInput.value = ""; // Reset input captcha
             return;
