@@ -10,7 +10,6 @@
     <div class="container">
         <h1>Absensi Siliwangi</h1>
         <p>~ Attendance monitoring system ~</p>
-        <p> </p>
         <form id="attendanceForm">
             <label for="name">Nama:</label>
             <input type="text" id="name" name="name" required>
@@ -29,7 +28,12 @@
             <div id="camera"></div>
             <button type="button" id="captureBtn">Ambil Foto</button>
             <input type="hidden" id="photoData" name="photoData">
-            
+            <p id="photoError" class="error-message"></p>
+
+            <label for="captcha">Captcha: <span id="captchaCode"></span></label>
+            <input type="text" id="captchaInput" placeholder="Masukkan kode di atas" required>
+            <p id="captchaError" class="error-message"></p>
+
             <button type="submit">Kirim</button>
         </form>
         <p id="statusMessage"></p>
