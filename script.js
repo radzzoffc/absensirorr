@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const photoInput = document.getElementById("photoData");
     const statusMessage = document.getElementById("statusMessage");
 
-    // SheetDB API URL (Ganti dengan URL Anda)
+    // SheetDB API URL
     const SHEETDB_URL = "https://sheetdb.io/api/v1/j40nw7zpqnydt";
 
     // Initialize webcam
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function startCamera() {
         try {
-            videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
             const video = document.createElement("video");
             video.srcObject = videoStream;
             video.play();
@@ -21,76 +21,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
             captureBtn.addEventListener("click", function () {
                 const canvas = document.createElement("canvas");
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                const maxSize = 300; // Maksimal ukuran gambar untuk kompresi
+                const scale = Math.min(maxSize / video.videoWidth, maxSize / video.videoHeight);
+                canvas.width = video.videoWidth * scale;
+                canvas.height = video.videoHeight * scale;
 
                 const context = canvas.getContext("2d");
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                photoInput.value = canvas.toDataURL("image/png");
-
-                // Stop video stream after capturing the photo
+                // Kompresi gambar
+                photoInput.value = canvas.toDataURL("image/jpeg", 0.5); // Kompresi dengan kualitas 50%
                 videoStream.getTracks().forEach((track) => track.stop());
                 camera.innerHTML = "<p>Foto berhasil diambil.</p>";
             });
         } catch (error) {
-            statusMessage.textContent = "Kamera tidak dapat diakses. Periksa izin browser.";
-            statusMessage.style.color = "red";
+            alert("Kamera tidak dapat diakses. Periksa izin browser.");
         }
     }
 
     startCamera();
 
-    // Validate form before submission
-    function validateFormData(formData) {
-        if (!formData.get("name") || !formData.get("date") || !formData.get("gender") || !formData.get("photoData")) {
-            return "Semua field wajib diisi.";
-        }
-        return null;
-    }
-
     // Submit form
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
-
         const formData = new FormData(form);
-        const validationError = validateFormData(formData);
-        if (validationError) {
-            statusMessage.textContent = validationError;
-            statusMessage.style.color = "red";
-            return;
-        }
-
-        const payload = {
-            data: {
-                name: formData.get("name"),
-                date: formData.get("date"),
-                gender: formData.get("gender"),
-                photo: formData.get("photoData"),
-            },
-        };
 
         try {
+            // Payload untuk SheetDB
+            const payload = {
+                data: {
+                    name: formData.get("name"),
+                    date: formData.get("date"),
+                    gender: formData.get("gender"),
+                    photo: formData.get("photoData"),
+                },
+            };
+
+            // Kirim data ke SheetDB
             const response = await fetch(SHEETDB_URL, {
                 method: "POST",
                 body: JSON.stringify(payload),
                 headers: { "Content-Type": "application/json" },
             });
+            const result = await response.json();
 
-            if (response.ok) {
-                const result = await response.json();
-                if (result.created > 0) {
-                    statusMessage.textContent = "Data berhasil dikirim!";
-                    statusMessage.style.color = "green";
-                    form.reset();
-                    camera.innerHTML = ""; // Clear the camera display
-                    startCamera(); // Restart the camera for another capture
-                } else {
-                    throw new Error("Gagal menyimpan data ke server.");
-                }
+            if (result.created > 0) {
+                statusMessage.textContent = "Data berhasil dikirim!";
+                statusMessage.style.color = "green";
+                form.reset();
             } else {
-                const errorText = await response.text();
-                throw new Error(`Error dari server: ${errorText}`);
+                throw new Error("Gagal menyimpan data.");
             }
         } catch (error) {
             statusMessage.textContent = `Gagal mengirim data: ${error.message}`;
