@@ -4,10 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const photoInput = document.getElementById("photoData");
     const statusMessage = document.getElementById("statusMessage");
 
-    // SheetDB API URL
     const SHEETDB_URL = "https://sheetdb.io/api/v1/j40nw7zpqnydt";
 
-    // Initialize webcam
     const camera = document.getElementById("camera");
     let videoStream;
 
@@ -29,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const context = canvas.getContext("2d");
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                // Kompresi gambar
                 photoInput.value = canvas.toDataURL("image/jpeg", 0.5); // Kompresi dengan kualitas 50%
                 videoStream.getTracks().forEach((track) => track.stop());
                 camera.innerHTML = "<p>Foto berhasil diambil.</p>";
@@ -40,14 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     startCamera();
-
-    // Submit form
+    
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const formData = new FormData(form);
 
         try {
-            // Payload untuk SheetDB
             const payload = {
                 data: {
                     name: formData.get("name"),
@@ -56,8 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     photo: formData.get("photoData"),
                 },
             };
-
-            // Kirim data ke SheetDB
             const response = await fetch(SHEETDB_URL, {
                 method: "POST",
                 body: JSON.stringify(payload),
@@ -66,14 +59,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const result = await response.json();
 
             if (result.created > 0) {
-                statusMessage.textContent = "Data berhasil dikirim!";
+                statusMessage.textContent = "Data Absensi sukses dikirimkan ke Database";
                 statusMessage.style.color = "green";
                 form.reset();
             } else {
-                throw new Error("Gagal menyimpan data.");
+                throw new Error("Gagal menyimpan ke Database");
             }
         } catch (error) {
-            statusMessage.textContent = `Gagal mengirim data: ${error.message}`;
+            statusMessage.textContent = `Gagal mengirim data ke Database: ${error.message}`;
             statusMessage.style.color = "red";
         }
     });
