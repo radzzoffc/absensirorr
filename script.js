@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 photoInput.value = canvas.toDataURL("image/jpeg", 0.5); // Kompresi dengan kualitas 50%
                 videoStream.getTracks().forEach((track) => track.stop());
-                camera.innerHTML = "<p>Foto berhasil diambil.</p>";
+                camera.innerHTML = "<p>Foto berhasil diambil</p>";
             });
         } catch (error) {
             alert("Kamera tidak dapat diakses. Periksa izin browser.");
