@@ -40,7 +40,7 @@
     <h1>Decode Base64 From Database</h1>
     <p>Masukkan kode Base64 berupa gambar dari database di bawah ini</p>
     <p>By RadzzOffc</p>
-    <textarea id="base64Input" placeholder="Tempelkan kode Base64 Anda di sini..."></textarea>
+    <textarea id="base64Input" placeholder="Tempelkan kode Base64 di sini..."></textarea>
     <br>
     <button onclick="decodeBase64()">Tampilkan</button>
     <div id="output"></div>
@@ -51,7 +51,7 @@
             const outputDiv = document.getElementById("output");
 
             if (!base64Input) {
-                alert("Masukkan kode Base64 terlebih dahulu.");
+                alert("Masukkan kode Base64");
                 return;
             }
 
