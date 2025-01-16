@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siliwangi Kas Monitoring </title>
+    <style>
+        /* Reset default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://files.catbox.moe/u5xsba.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                font-size: 1.2rem;
+            }
+
+            nav a {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>Siliwangi Kas Monitoring Data</header>
+    <nav>
+        <a href="#" onclick="showPage('transparansi')">Transparansi Data</a>
+        <a href="#" onclick="showPage('login')">Halaman Admin</a>
+    </nav>
+    <div class="container">
+        <!-- Transparansi -->
+        <div id="transparansi" class="page active">
+            <h2>Transparansi Data Kas</h2>
+            <p>Total Saldo: <span id="totalSaldo">0</span></p>
+            <input type="text" class="search-input" id="searchTransparansi" placeholder="Cari berdasarkan nama..." onkeyup="filterTable('publicTable', 'searchTransparansi')">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Jumlah</th>
+                        <th>Ket</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody id="publicTable"></tbody>
+            </table>
+        </div>
+
+        <!-- Login -->
+        <div id="login" class="page">
+            <h2>Login Admin</h2>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="adminPassword" placeholder="Masukkan password">
+            </div>
+            <button onclick="verifyAdmin()">Login</button>
+        </div>
+
+        <!-- Admin -->
+        <div id="admin" class="page">
+            <h2>Halaman Admin</h2>
+            <div class="form-group">
+                <label>Nama:</label>
+                <input type="text" id="name" placeholder="Nama">
+            </div>
+            <div class="form-group">
+                <label>Jumlah:</label>
+                <input type="number" id="amount" placeholder="Jumlah">
+            </div>
+            <div class="form-group">
+                <label>Keterangan:</label>
+                <input type="text" id="description" placeholder="Keterangan">
+            </div>
+            <div class="form-group">
+                <label>Tanggal:</label>
+                <input type="date" id="date">
+            </div>
+            <button onclick="addTransaction()">Tambah</button>
+            <h3>Daftar Kas</h3>
+            <input type="text" class="search-input" id="searchAdmin" placeholder="Cari berdasarkan nama..." onkeyup="filterTable('adminTable', 'searchAdmin')">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Jumlah</th>
+                        <th>Ket</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const adminPassword = "siliwangiteamdigi";
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        // Render Data
+        function renderTables() {
+            const publicTable = document.getElementById('publicTable');
+            const adminTable = document.getElementById('adminTable');
+            const totalSaldo = document.getElementById('totalSaldo');
+            let saldo = 0;
+
+            publicTable.innerHTML = '';
+            adminTable.innerHTML = '';
+            transactions.forEach((transaction, index) => {
+                saldo += parseFloat(transaction.amount);
+                const row = `
+                    <tr>
+                        <td>${transaction.name}</td>
+                        <td>${transaction.amount}</td>
+                        <td>${transaction.description}</td>
+                        <td>${transaction.date}</td>
+                    </tr>
+                `;
+                publicTable.innerHTML += row;
+
+                const adminRow = `
+                    <tr>
+                        <td>${transaction.name}</td>
+                        <td>${transaction.amount}</td>
+                        <td>${transaction.description}</td>
+                        <td>${transaction.date}</td>
+                        <td>
+                            <button onclick="editTransaction(${index})">Edit</button>
+                            <button onclick="deleteTransaction(${index})">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+                adminTable.innerHTML += adminRow;
+            });
+            totalSaldo.textContent = saldo;
+        }
+
+        // Tambah Data
+        function addTransaction() {
+            const name = document.getElementById('name').value;
+            const amount = document.getElementById('amount').value;
+            const description = document.getElementById('description').value;
+            const date = document.getElementById('date').value;
+
+            if (name && amount && description && date) {
+                transactions.push({ name, amount, description, date });
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                renderTables();
+            } else {
+                alert('Semua field harus diisi!');
+            }
+        }
+
+        // Edit Data
+        function editTransaction(index) {
+            const transaction = transactions[index];
+            document.getElementById('name').value = transaction.name;
+            document.getElementById('amount').value = transaction.amount;
+            document.getElementById('description').value = transaction.description;
+            document.getElementById('date').value = transaction.date;
+            transactions.splice(index, 1);
+        }
+
+        // Hapus Data
+        function deleteTransaction(index) {
+            transactions.splice(index, 1);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            renderTables();
+        }
+
+        // Filter Tabel
+        function filterTable(tableId, searchId) {
+            const searchValue = document.getElementById(searchId).value.toLowerCase();
+            const rows = document.querySelectorAll(`#${tableId} tr`);
+            rows.forEach(row => {
+                const name = row.cells[0]?.textContent.toLowerCase();
+                row.style.display = name?.includes(searchValue) ? '' : 'none';
+            });
+        }
+
+        // Verifikasi Admin
+        function verifyAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === adminPassword) {
+                showPage('admin');
+            } else {
+                alert('Password salah!');
+            }
+        }
+
+        // Tampilkan Halaman
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Inisialisasi
+        renderTables();
+    </script>
+</body>
+  </html>
