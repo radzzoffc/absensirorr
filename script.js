@@ -18,27 +18,49 @@ document.addEventListener("DOMContentLoaded", function () {
             video.srcObject = videoStream;
             video.play();
             camera.appendChild(video);
+
             captureBtn.addEventListener("click", function () {
                 const canvas = document.createElement("canvas");
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
+
                 const context = canvas.getContext("2d");
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
                 photoInput.value = canvas.toDataURL("image/png");
+
+                // Stop video stream after capturing the photo
                 videoStream.getTracks().forEach((track) => track.stop());
                 camera.innerHTML = "<p>Foto berhasil diambil.</p>";
             });
         } catch (error) {
-            alert("Kamera tidak dapat diakses. Periksa izin browser.");
+            statusMessage.textContent = "Kamera tidak dapat diakses. Periksa izin browser.";
+            statusMessage.style.color = "red";
         }
     }
 
     startCamera();
 
+    // Validate form before submission
+    function validateFormData(formData) {
+        if (!formData.get("name") || !formData.get("date") || !formData.get("gender") || !formData.get("photoData")) {
+            return "Semua field wajib diisi.";
+        }
+        return null;
+    }
+
     // Submit form
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
+
         const formData = new FormData(form);
+        const validationError = validateFormData(formData);
+        if (validationError) {
+            statusMessage.textContent = validationError;
+            statusMessage.style.color = "red";
+            return;
+        }
+
         const payload = {
             data: {
                 name: formData.get("name"),
@@ -54,13 +76,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: JSON.stringify(payload),
                 headers: { "Content-Type": "application/json" },
             });
-            const result = await response.json();
-            if (result.created > 0) {
-                statusMessage.textContent = "Data berhasil dikirim!";
-                statusMessage.style.color = "green";
-                form.reset();
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.created > 0) {
+                    statusMessage.textContent = "Data berhasil dikirim!";
+                    statusMessage.style.color = "green";
+                    form.reset();
+                    camera.innerHTML = ""; // Clear the camera display
+                    startCamera(); // Restart the camera for another capture
+                } else {
+                    throw new Error("Gagal menyimpan data ke server.");
+                }
             } else {
-                throw new Error("Gagal menyimpan data.");
+                const errorText = await response.text();
+                throw new Error(`Error dari server: ${errorText}`);
             }
         } catch (error) {
             statusMessage.textContent = `Gagal mengirim data: ${error.message}`;
