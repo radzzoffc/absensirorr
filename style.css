@@ -1,9 +1,9 @@
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background-image: url('https://your-background-image-link.com');
+    background-image: url('https://your-background-link.com/image.jpg');
     background-size: cover;
-    background-position: center;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,47 +12,42 @@ body {
 }
 
 .container {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     padding: 20px;
     border-radius: 10px;
-    width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     text-align: center;
+    width: 100%;
+    max-width: 400px;
 }
 
-h1 {
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-label {
+form label {
     display: block;
-    margin-bottom: 5px;
+    margin: 10px 0 5px;
 }
 
-input, select, button {
+form input, form select {
     width: 100%;
     padding: 10px;
+    margin-bottom: 15px;
     border: none;
     border-radius: 5px;
 }
 
 button {
-    background: #1e90ff;
-    color: white;
-    font-size: 16px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
 }
 
 button:hover {
-    background: #4682b4;
+    background-color: #0056b3;
 }
 
-#status {
-    margin-top: 20px;
-    color: #32cd32;
+#camera {
+    margin-bottom: 10px;
 }
