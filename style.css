@@ -2,6 +2,8 @@ body {
     font-family: Arial, sans-serif;
     background-image: url('https://files.catbox.moe/u5xsba.png');
     background-size: cover;
+    background-potition: center;
+    background-repeat: no-repeat;
     margin: 0;
     padding: 0;
     display: flex;
