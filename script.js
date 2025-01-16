@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             captureBtn.addEventListener("click", function () {
                 const canvas = document.createElement("canvas");
-                const maxSize = 300;
+                const maxSize = 100;
                 const scale = Math.min(maxSize / video.videoWidth, maxSize / video.videoHeight);
                 canvas.width = video.videoWidth * scale;
                 canvas.height = video.videoHeight * scale;
