@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const statusMessage = document.getElementById("statusMessage");
 
     // SheetDB API URL (Ganti dengan URL Anda)
-    const SHEETDB_URL = "https://sheetdb.io/api/v1/gbwqck4ls6xpn";
+    const SHEETDB_URL = "https://sheetdb.io/api/v1/j40nw7zpqnydt";
 
     // Initialize webcam
     const camera = document.getElementById("camera");
