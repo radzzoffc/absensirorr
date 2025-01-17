@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const camera = document.getElementById("camera");
     let videoStream;
 
-    // Generate random Captcha
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
         captchaCodeElement.textContent = captchaCode;
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     let generatedCaptcha = generateCaptcha();
 
-    // Start the camera
     async function startCamera() {
         try {
             videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
@@ -50,25 +48,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     startCamera();
 
-    // Form submission
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const formData = new FormData(form);
 
-        // Validasi foto
         if (!photoInput.value) {
             photoError.textContent = "Upss Foto duluu";
             return;
         }
 
-        // Validasi captcha
         if (captchaInput.value.toUpperCase() !== generatedCaptcha) {
             captchaError.textContent = "Captcha tidak sesuai";
-            generateCaptcha(); // Generate ulang captcha
-            captchaInput.value = ""; // Reset input captcha
+            generateCaptcha(); 
+            captchaInput.value = ""; 
             return;
         } else {
-            captchaError.textContent = ""; // Clear captcha error
+            captchaError.textContent = ""; 
         }
 
         try {
@@ -91,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 statusMessage.textContent = "Data Absensi sukses dikirimkan ke Database";
                 statusMessage.style.color = "green";
                 form.reset();
-                generatedCaptcha = generateCaptcha(); // Reset captcha
+                generatedCaptcha = generateCaptcha(); 
             } else {
                 throw new Error("Gagal menyimpan ke Database");
             }
