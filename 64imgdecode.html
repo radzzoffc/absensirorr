@@ -8,37 +8,12 @@
 </head>
 <body>
     <h1>Decode Base64 From Database</h1>
-    <p>Masukkan kode Base64 berupa gambar dari database di bawah ini</p>
+    <p>Masukkan kode Base64 berupa gambar dari database pada kolom di bawah ini</p>
     <p>By RadzzOffc</p>
     <textarea id="base64Input" placeholder="Tempelkan kode Base64 di sini..."></textarea>
     <br>
     <button onclick="decodeBase64()">Tampilkan</button>
     <div id="output"></div>
-
-    <script>
-        function decodeBase64() {
-            const base64Input = document.getElementById("base64Input").value.trim();
-            const outputDiv = document.getElementById("output");
-
-            if (!base64Input) {
-                alert("Masukkan kode Base64");
-                return;
-            }
-
-            outputDiv.innerHTML = "";
-
-            const base64Regex = /^data:image\/(png|jpeg|gif|bmp);base64,/;
-            if (!base64Regex.test(base64Input)) {
-                alert("Kode Base64 tidak valid atau jenis gambar tidak didukung. Pastikan menggunakan format data:image/jpeg;base64, atau data:image/png;base64,.");
-                return;
-            }
-
-            const img = document.createElement("img");
-            img.src = base64Input;
-            img.alt = "Data Result";
-
-            outputDiv.appendChild(img);
-        }
-    </script>
+<script a href="script64.js"></script>
 </body>
 </html>
