@@ -96,3 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+window.onload = function() {
+            alert("Isi data yg diperlukan, PERHATIKAN!: klick kirim hanya 1× saja dan tunggu jika gagal silahkan ulangi, perhatikan petuntuk di bagian paling bawah juga!!");
+        };
