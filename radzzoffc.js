@@ -1,4 +1,4 @@
-const correctPassword = "siliwangidigi339";
+const correctPassword = "slwdigi";
 
 const passwordInput = document.getElementById("password");
 const submitButton = document.getElementById("submit");
@@ -8,7 +8,7 @@ submitButton.addEventListener("click", () => {
     const enteredPassword = passwordInput.value;
 
     if (enteredPassword === correctPassword) {
-        window.location.href = "absenmonitoring.html";
+        window.location.href = "siliwangiteamdigi.html";
     } else {
         errorMessage.style.display = "block";
     }
