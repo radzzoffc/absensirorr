@@ -55,22 +55,18 @@
                 return;
             }
 
-            // Bersihkan output sebelumnya
             outputDiv.innerHTML = "";
 
-            // Validasi format Base64
             const base64Regex = /^data:image\/(png|jpeg|gif|bmp);base64,/;
             if (!base64Regex.test(base64Input)) {
                 alert("Kode Base64 tidak valid atau jenis gambar tidak didukung. Pastikan menggunakan format data:image/jpeg;base64, atau data:image/png;base64,.");
                 return;
             }
 
-            // Buat elemen gambar
             const img = document.createElement("img");
             img.src = base64Input;
-            img.alt = "Hasil Gambar";
+            img.alt = "Data Result";
 
-            // Tampilkan gambar di halaman
             outputDiv.appendChild(img);
         }
     </script>
