@@ -1,4 +1,4 @@
-const correctPassword = "slwdigi";
+const correctPassword = "slwdigi2";
 
 const passwordInput = document.getElementById("password");
 const submitButton = document.getElementById("submit");
