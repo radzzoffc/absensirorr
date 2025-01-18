@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
             // Kirim data ke backend yang sudah disesuaikan untuk pengecekan pembatasan IP
-            const response = await fetch('http://localhost:3000/submit', {
+            const response = await fetch('http://104.248.149.76:3000/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
