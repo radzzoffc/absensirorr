@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const result = await response.json();
 
             if (result.created > 0) {
-                alert(Data sukses dikirimkan ke database);
+                alert("Data sukses dikirimkan ke database");
                 statusMessage.textContent = "Data Absensi sukses dikirimkan ke Database";
                 statusMessage.style.color = "green";
                 form.reset();
