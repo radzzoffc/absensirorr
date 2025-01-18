@@ -7,10 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const captchaInput = document.getElementById("captchaInput");
     const captchaError = document.getElementById("captchaError");
     const statusMessage = document.getElementById("statusMessage");
+    const SHEETDB_URL = "https://sheetdb.io/api/v1/j40nw7zpqnydt";
     const camera = document.getElementById("camera");
     let videoStream;
-
-    const BACKEND_URL = "http://104.248.149.76:3000/attendance"; 
 
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
@@ -37,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const context = canvas.getContext("2d");
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                photoInput.value = canvas.toDataURL("image/jpeg", 0.5);
+                photoInput.value = canvas.toDataURL("image/jpeg", 0.5); 
                 videoStream.getTracks().forEach((track) => track.stop());
                 camera.innerHTML = "<p>Foto berhasil diambil</p>";
                 photoError.textContent = "";
@@ -60,55 +59,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (captchaInput.value.toUpperCase() !== generatedCaptcha) {
             captchaError.textContent = "Captcha tidak sesuai";
-            generateCaptcha();
-            captchaInput.value = "";
+            generateCaptcha(); 
+            captchaInput.value = ""; 
             return;
         } else {
-            captchaError.textContent = "";
+            captchaError.textContent = ""; 
         }
 
         try {
-            const response = await fetch(BACKEND_URL + "/status");
-            if (!response.ok) {
-                throw new Error("Server sedang offline, coba lagi nanti.");
-            }
-
             const payload = {
-                name: formData.get("name"),
-                date: formData.get("date"),
-                gender: formData.get("gender"),
-                photo: formData.get("photoData"),
+                data: {
+                    name: formData.get("name"),
+                    date: formData.get("date"),
+                    gender: formData.get("gender"),
+                    photo: formData.get("photoData"),
+                },
             };
-
-            const sendResponse = await fetch(BACKEND_URL, {
+            const response = await fetch(SHEETDB_URL, {
                 method: "POST",
                 body: JSON.stringify(payload),
                 headers: { "Content-Type": "application/json" },
             });
+            const result = await response.json();
 
-            if (sendResponse.status === 429) {
-                throw new Error("Anda hanya dapat mengirim data sekali setiap jam.");
-            }
-
-            const result = await sendResponse.json();
-
-            if (result.success) {
+            if (result.created > 0) {
                 statusMessage.textContent = "Data Absensi sukses dikirimkan ke Database";
                 statusMessage.style.color = "green";
                 form.reset();
-                generatedCaptcha = generateCaptcha();
+                generatedCaptcha = generateCaptcha(); 
             } else {
                 throw new Error("Gagal menyimpan ke Database");
             }
         } catch (error) {
-            statusMessage.textContent = `Gagal mengirim data: Server Offline, minta Krani menyalakan server || ${error.message}`;
+            statusMessage.textContent = `Gagal mengirim data ke Database: ${error.message}`;
             statusMessage.style.color = "red";
         }
     });
 });
 
-window.onload = function () {
-    alert(
-        "PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu dan lihat status di bawah tombol Kirim\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!"
-    );
-};
+window.onload = function() {
+            alert("Isi data yg diperlukan, PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!");
+        };
