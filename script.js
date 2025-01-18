@@ -48,6 +48,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     startCamera();
 
+    async function getUserIP() {
+        try {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
+            console.error("Gagal mendapatkan IP:", error);
+            return null;
+        }
+    }
+
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const formData = new FormData(form);
@@ -64,6 +75,22 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         } else {
             captchaError.textContent = ""; 
+        }
+
+        // Dapatkan IP pengguna
+        const userIP = await getUserIP();
+        if (!userIP) {
+            alert("Gagal mendapatkan IP perangkat. Coba lagi nanti.");
+            return;
+        }
+
+        // Cek apakah sudah ada pengiriman dari IP yang sama dalam 1 jam terakhir
+        const lastSubmitTime = localStorage.getItem(`lastSubmitTime_${userIP}`);
+        const currentTime = new Date().getTime();
+        
+        if (lastSubmitTime && currentTime - lastSubmitTime < 3600000) { // 1 jam = 3600000ms
+            alert("Anda sudah mengirim data sebelumnya. Mohon tunggu 1 jam sebelum mencoba lagi.");
+            return;
         }
 
         try {
@@ -87,6 +114,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 statusMessage.style.color = "green";
                 form.reset();
                 generatedCaptcha = generateCaptcha(); 
+
+                // Simpan waktu pengiriman data dan IP pengguna ke localStorage
+                localStorage.setItem(`lastSubmitTime_${userIP}`, currentTime);
             } else {
                 throw new Error("Gagal menyimpan ke Database");
             }
@@ -98,5 +128,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.onload = function() {
-            alert("Isi data yg diperlukan, PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!");
-        };
+    alert("PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!");
+};
