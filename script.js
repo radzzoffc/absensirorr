@@ -11,11 +11,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const camera = document.getElementById("camera");
     let videoStream;
 
+    // Flag untuk status server (aktif / non-aktif)
+    let serverActive = false; // Set true untuk aktif, false untuk non-aktif
+
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
         captchaCodeElement.textContent = captchaCode;
         return captchaCode;
     }
+
     let generatedCaptcha = generateCaptcha();
 
     async function startCamera() {
@@ -62,6 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const formData = new FormData(form);
+
+        // Mengecek apakah server aktif atau tidak
+        if (!serverActive) {
+            alert("Server sedang tidak aktif. Pengiriman data tidak dapat dilakukan.");
+            return;
+        }
 
         if (!photoInput.value) {
             photoError.textContent = "Upss Foto duluu";
@@ -128,5 +138,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.onload = function() {
-    alert("PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!");
+    alert("PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!\n\n\n\nVersi: 1.1.0");
 };
