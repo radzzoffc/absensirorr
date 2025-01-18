@@ -10,9 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const SHEETDB_URL = "https://sheetdb.io/api/v1/j40nw7zpqnydt";
     const camera = document.getElementById("camera");
     let videoStream;
-
-    // Flag untuk status server (aktif / non-aktif)
-    let serverActive = true; // Set true untuk aktif, false untuk non-aktif
+    let serverActive = true; 
 
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
@@ -67,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         const formData = new FormData(form);
 
-        // Mengecek apakah server aktif atau tidak
         if (!serverActive) {
             alert("Server sedang tidak aktif\n\nMinta Krani untuk menyalakan server");
             return;
@@ -86,19 +83,17 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             captchaError.textContent = ""; 
         }
-
-        // Dapatkan IP pengguna
+        
         const userIP = await getUserIP();
         if (!userIP) {
             alert("Gagal looup IP perangkat. Coba lagi nanti");
             return;
         }
-
-        // Cek apakah sudah ada pengiriman dari IP yang sama dalam 1 jam terakhir
+        
         const lastSubmitTime = localStorage.getItem(`lastSubmitTime_${userIP}`);
         const currentTime = new Date().getTime();
         
-        if (lastSubmitTime && currentTime - lastSubmitTime < 3600000) { // 1 jam = 3600000ms
+        if (lastSubmitTime && currentTime - lastSubmitTime < 3600000) { 
             alert("Kamu sudah melakukan Absen sebelumnya!\n\nTunggu 1jam lagi selagi server belum di matikan oleh Krani");
             return;
         }
@@ -120,12 +115,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const result = await response.json();
 
             if (result.created > 0) {
+                alert(Data sukses dikirimkan ke database);
                 statusMessage.textContent = "Data Absensi sukses dikirimkan ke Database";
                 statusMessage.style.color = "green";
                 form.reset();
                 generatedCaptcha = generateCaptcha(); 
 
-                // Simpan waktu pengiriman data dan IP pengguna ke localStorage
                 localStorage.setItem(`lastSubmitTime_${userIP}`, currentTime);
             } else {
                 throw new Error("Gagal menyimpan ke Database");
