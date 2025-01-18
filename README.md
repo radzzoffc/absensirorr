@@ -6,7 +6,7 @@
 <h3>Versi 1.0.1</h3>
 <p>Update name selector agar tidak ada data nama palsu</p>
 <h3>Versi 1.1.0</h3>
-<p>Pembatasan pengiriman data 1× tiap jam, dengan validasi sistem backend untuk mengontrol pengiriman data ke server pusat</p>
+<p>Pembatasan pengiriman data 1× tiap jam, dengan validasi sistem backend untuk mengontrol pengiriman data ke server pusat dengan kontrol Admin dari backend</p>
 <h1>Credit On Project</h1>
 <p>Create by RadzzOffc🔥</p>
 <h1>Thanks To</h1>
