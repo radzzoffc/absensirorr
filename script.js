@@ -109,6 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.onload = function () {
     alert(
-        "PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu dan lihat status di bawah tombol "Kirim"\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!"
+        "PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu dan lihat status di bawah tombol Kirim\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!"
     );
 };
