@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const camera = document.getElementById("camera");
     let videoStream;
 
-    const BACKEND_URL = "http://104.248.149.76:3000/attendance"; // Update with your Node.js backend URL
+    const BACKEND_URL = "http://104.248.149.76:3000/attendance"; 
 
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 throw new Error("Gagal menyimpan ke Database");
             }
         } catch (error) {
-            statusMessage.textContent = `Gagal mengirim data: ${error.message}\nServer Offline`;
+            statusMessage.textContent = `Gagal mengirim data: Server Offline, minta Krani menyalakan server`;
             statusMessage.style.color = "red";
         }
     });
@@ -109,6 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.onload = function () {
     alert(
-        "Isi data yg diperlukan, PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!"
+        "PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu dan lihat status di bawah tombol "Kirim"\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!"
     );
 };
