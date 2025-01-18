@@ -7,17 +7,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const captchaInput = document.getElementById("captchaInput");
     const captchaError = document.getElementById("captchaError");
     const statusMessage = document.getElementById("statusMessage");
-    const SHEETDB_URL = "https://sheetdb.io/api/v1/j40nw7zpqnydt";
     const camera = document.getElementById("camera");
     let videoStream;
 
+    // Fungsi untuk menghasilkan CAPTCHA
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
         captchaCodeElement.textContent = captchaCode;
         return captchaCode;
     }
+
     let generatedCaptcha = generateCaptcha();
 
+    // Fungsi untuk memulai kamera
     async function startCamera() {
         try {
             videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
@@ -48,15 +50,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     startCamera();
 
+    // Menangani pengiriman form
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const formData = new FormData(form);
 
+        // Validasi jika foto belum diambil
         if (!photoInput.value) {
             photoError.textContent = "Upss Foto duluu";
             return;
         }
 
+        // Validasi CAPTCHA
         if (captchaInput.value.toUpperCase() !== generatedCaptcha) {
             captchaError.textContent = "Captcha tidak sesuai";
             generateCaptcha(); 
@@ -75,28 +80,36 @@ document.addEventListener("DOMContentLoaded", function () {
                     photo: formData.get("photoData"),
                 },
             };
-            const response = await fetch(SHEETDB_URL, {
-                method: "POST",
-                body: JSON.stringify(payload),
-                headers: { "Content-Type": "application/json" },
+
+            // Kirim data ke backend yang sudah disesuaikan untuk pengecekan pembatasan IP
+            const response = await fetch('http://localhost:3000/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
             });
+
             const result = await response.json();
 
-            if (result.created > 0) {
-                statusMessage.textContent = "Data Absensi sukses dikirimkan ke Database";
+            // Menampilkan status berdasarkan hasil pengiriman data
+            if (response.ok) {
+                statusMessage.textContent = result.message;
                 statusMessage.style.color = "green";
                 form.reset();
                 generatedCaptcha = generateCaptcha(); 
             } else {
-                throw new Error("Gagal menyimpan ke Database");
+                statusMessage.textContent = result;
+                statusMessage.style.color = "red";
             }
         } catch (error) {
             statusMessage.textContent = `Gagal mengirim data ke Database: ${error.message}`;
             statusMessage.style.color = "red";
         }
     });
-});
 
-window.onload = function() {
-            alert("Isi data yg diperlukan, PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!");
-        };
+    // Menampilkan peringatan saat halaman pertama kali dimuat
+    window.onload = function() {
+        alert("PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!");
+    };
+});
