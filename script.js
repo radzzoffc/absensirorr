@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 throw new Error("Gagal menyimpan ke Database");
             }
         } catch (error) {
-            statusMessage.textContent = `Gagal mengirim data: ${error.message}`;
+            statusMessage.textContent = `Gagal mengirim data: ${error.message}\nServer Offline`;
             statusMessage.style.color = "red";
         }
     });
