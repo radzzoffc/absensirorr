@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let videoStream;
 
     // Flag untuk status server (aktif / non-aktif)
-    let serverActive = false; // Set true untuk aktif, false untuk non-aktif
+    let serverActive = true; // Set true untuk aktif, false untuk non-aktif
 
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
