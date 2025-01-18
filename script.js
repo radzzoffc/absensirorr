@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Mengecek apakah server aktif atau tidak
         if (!serverActive) {
-            alert("Server sedang tidak aktif. Pengiriman data tidak dapat dilakukan.");
+            alert("Server sedang tidak aktif\n\nMinta Krani untuk menyalakan server");
             return;
         }
 
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Dapatkan IP pengguna
         const userIP = await getUserIP();
         if (!userIP) {
-            alert("Gagal mendapatkan IP perangkat. Coba lagi nanti.");
+            alert("Gagal looup IP perangkat. Coba lagi nanti");
             return;
         }
 
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const currentTime = new Date().getTime();
         
         if (lastSubmitTime && currentTime - lastSubmitTime < 3600000) { // 1 jam = 3600000ms
-            alert("Anda sudah mengirim data sebelumnya. Mohon tunggu 1 jam sebelum mencoba lagi.");
+            alert("Kamu sudah melakukan Absen sebelumnya!\n\nTunggu 1jam lagi selagi server belum di matikan ");
             return;
         }
 
