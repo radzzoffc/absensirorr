@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const SHEETDB_URL = "https://sheetdb.io/api/v1/j40nw7zpqnydt";
     const camera = document.getElementById("camera");
     let videoStream;
-    let serverActive = true; 
+    let serverActive = false; 
 
     function generateCaptcha() {
         const captchaCode = Math.random().toString(36).substring(2, 7).toUpperCase();
