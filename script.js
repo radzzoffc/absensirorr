@@ -133,5 +133,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.onload = function() {
-    alert("PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!\n\n\n\nVersi: 1.1.0");
+    alert("PERHATIKAN!:\nKlick kirim hanya 1× saja dan tunggu, jika gagal silahkan ulangi, jika berhasil jangan kirim data 2×\n\nPerhatikan petuntuk pengisian di bagian paling bawah juga!!\n\n\n\nVersi: 1.2.1");
 };
