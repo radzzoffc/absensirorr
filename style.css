@@ -1,9 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url('https://files.catbox.moe/u5xsba.png');
+    background: url('https://files.catbox.moe/u5xsba.png') no-repeat center center;
     background-size: cover;
-    background-potition: center;
-    background-repeat: no-repeat;
     margin: 0;
     padding: 0;
     display: flex;
@@ -11,6 +9,20 @@ body {
     align-items: center;
     height: 100vh;
     color: #fff;
+}
+
+@media (max-width: 768px) {
+    body {
+        background: url('https://files.catbox.moe/u5xsba.png') no-repeat center center;
+        background-size: contain;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        background: url('https://files.catbox.moe/u5xsba.png') no-repeat center center;
+        background-size: cover;
+    }
 }
 
 .container {
