@@ -13,6 +13,7 @@
 <p>Minor update dan menambahkan fungsi anti inspect code, xixi</p>
 <h1>Credit On Project</h1>
 <p>Create by RadzzOffc🔥</p>
+<p>Support by Gpt AI</p>
 <h1>Thanks To</h1>
 <p>Allah SWT</p>
 <p>My Parents</p>
