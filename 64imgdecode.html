@@ -1,19 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DecodingBase | Radzz</title>
-    <link rel="stylesheet" href="style64.css">
+  <meta charset="UTF-8">
+  <title>SLW 64DECODER | DIGITEAM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Decode Base64 From Database</h1>
-    <p>Masukkan kode Base64 berupa gambar dari database pada kolom di bawah ini</p>
-    <p>By RadzzOffc</p>
-    <textarea id="base64Input" placeholder="Tempelkan kode Base64 di sini..."></textarea>
-    <br>
-    <button onclick="decodeBase64()">Tampilkan</button>
-    <div id="output"></div>
-<script a href="script64.js"></script>
+<body class="bg-black text-green-400 font-mono min-h-screen flex flex-col items-center py-10 px-4">
+
+  <h1 class="text-2xl md:text-4xl font-bold mb-6 text-center">64 Decoder</h1>
+
+  <textarea id="base64Input" placeholder="Tempelkan data Base64 di sini..." class="w-full max-w-3xl h-40 bg-zinc-900 text-green-400 p-4 rounded-lg border border-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none mb-4"></textarea>
+
+  <div class="flex flex-wrap gap-4 mb-6">
+    <button onclick="decodeBase64()" class="bg-green-500 hover:bg-green-600 text-black font-semibold px-6 py-2 rounded shadow">
+      Tampilkan Gambar
+    </button>
+    <button onclick="downloadImage()" class="bg-green-700 hover:bg-green-800 text-white font-semibold px-6 py-2 rounded shadow">
+      Unduh Gambar
+    </button>
+  </div>
+
+  <div class="w-full max-w-3xl border border-green-600 rounded-lg p-4 flex justify-center items-center bg-zinc-900">
+    <img id="decodedImage" alt="Gambar hasil decode akan tampil di sini" class="max-w-full h-auto rounded shadow-lg" />
+  </div>
+
+  <script>
+    function decodeBase64() {
+      const base64 = document.getElementById('base64Input').value.trim();
+      const img = document.getElementById('decodedImage');
+      if (!base64.startsWith("data:image")) {
+        img.src = "data:image/png;base64," + base64; // Tambahin header kalau ga ada
+      } else {
+        img.src = base64;
+      }
+    }
+
+    function downloadImage() {
+      const img = document.getElementById('decodedImage');
+      if (!img.src || !img.src.startsWith("data:image")) {
+        alert("Tampilkan gambar terlebih dahulu!");
+        return;
+      }
+
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = 'decoded-image.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+
 </body>
 </html>
